@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="theme-color" content="#0a0805"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MH Encyclopédie"/>
+<title>Monster Hunter — Encyclopédie</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold: #c8922a;
+    --gold-light: #e8c070;
+    --gold-dim: #8a6030;
+    --bg: #0a0805;
+    --bg2: #120c04;
+    --bg3: #1a1008;
+    --text: #e8d5b0;
+    --text-dim: #9a8060;
+    --red: #cc3322;
+    --blue: #3388cc;
+    --tier-flagship: #FFD700;
+    --tier-elder: #FF4444;
+    --tier-large: #44AAFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Text', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 15%, rgba(180,60,0,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 85%, rgba(100,30,0,0.15) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 50%, rgba(30,10,0,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(8,5,2,0.97);
+    border-bottom: 1px solid rgba(180,120,40,0.25);
+    backdrop-filter: blur(12px);
+    padding: 14px 20px;
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-dragon { font-size: 36px; filter: drop-shadow(0 0 12px rgba(220,140,40,0.6)); }
+
+  .header-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(16px, 4vw, 26px);
+    font-weight: 900;
+    color: var(--gold-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(220,140,40,0.4);
+    line-height: 1.2;
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* FILTERS */
+  .filters-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+
+  .filters-box {
+    background: rgba(18,10,3,0.85);
+    border: 1px solid rgba(140,90,30,0.25);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .search-input {
+    flex: 1 1 200px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(140,90,30,0.35);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Crimson Text', serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--gold-dim); }
+  .search-input::placeholder { color: var(--text-dim); }
+
+  select {
+    flex: 1 1 140px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(140,90,30,0.35);
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'Crimson Text', serif;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a6030' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+  }
+  select option { background: #1a0d04; }
+
+  .result-count {
+    font-size: 12px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.08em;
+  }
+
+  /* TIER BADGES */
+  .tier-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .tier-tab {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  /* GRID */
+  .grid-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+
+  .monsters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  @media (max-width: 400px) {
+    .monsters-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .monster-card {
+    background: rgba(12,7,2,0.92);
+    border-radius: 8px;
+    padding: 14px 12px;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .monster-card:hover, .monster-card:active {
+    transform: translateY(-3px);
+  }
+
+  .card-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .card-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+
+  .card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+
+  .card-type {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .card-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  .badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.88);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    background: linear-gradient(145deg, #160e04, #0a0805);
+    border-radius: 12px;
+    padding: 28px 24px;
+    max-width: 460px;
+    width: 100%;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.93) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-top-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px; right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+    border-radius: 4px;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--text); }
+
+  .modal-icon { font-size: 52px; margin-bottom: 12px; display: block; }
+
+  .modal-name {
+    font-family: 'Cinzel', serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+
+  .modal-meta {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    letter-spacing: 0.06em;
+  }
+
+  .modal-desc {
+    font-size: 15px;
+    color: #c4a870;
+    line-height: 1.75;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .modal-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .stat-box {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(140,90,30,0.2);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: #6a5040;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* EMPTY */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #4a3020;
+  }
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+  .empty-state p { font-size: 16px; font-family: 'Cinzel', serif; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="header-dragon">🐉</span>
+    <div>
+      <div class="header-title">Monster Hunter</div>
+      <div class="header-sub">Encyclopédie des Monstres</div>
+    </div>
+  </div>
+</header>
+
+<div class="filters-wrap">
+  <div class="filters-box">
+    <input class="search-input" id="searchInput" type="text" placeholder="🔍 Rechercher un monstre..." oninput="applyFilters()"/>
+    <select id="filterTier" onchange="applyFilters()">
+      <option value="all">Tous les tiers</option>
+      <option value="flagship">⭐ Flagship</option>
+      <option value="elder">🔴 Dragon Ancien</option>
+      <option value="large">🔵 Grand Monstre</option>
+    </select>
+    <select id="filterGame" onchange="applyFilters()">
+      <option value="all">Tous les jeux</option>
+    </select>
+    <select id="filterType" onchange="applyFilters()">
+      <option value="all">Tous les types</option>
+    </select>
+    <span class="result-count" id="resultCount">60 monstres</span>
+  </div>
+</div>
+
+<div class="grid-wrap">
+  <div class="monsters-grid" id="monstersGrid"></div>
+  <div class="empty-state" id="emptyState" style="display:none">
+    <span class="empty-icon">🏕️</span>
+    <p>Aucun monstre trouvé</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-top-stripe" id="modalStripe"></div>
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <span class="modal-icon" id="modalIcon"></span>
+    <div class="modal-name" id="modalName"></div>
+    <div class="modal-meta" id="modalMeta"></div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <div class="modal-stats" id="modalStats"></div>
+  </div>
+</div>
+
+<script>
+const TIERS = {
+  flagship: { label: "Flagship", color: "#FFD700", bg: "rgba(255,215,0,0.13)" },
+  elder:    { label: "Dragon Ancien", color: "#FF4444", bg: "rgba(255,68,68,0.13)" },
+  large:    { label: "Grand Monstre", color: "#44AAFF", bg: "rgba(68,170,255,0.13)" },
+};
+
+const MONSTERS = [
+  { id:1,  name:"Rathalos",        type:"Wyvern Volant",    element:"Feu",          weakness:"Tonnerre", game:"Monster Hunter",                  tier:"flagship", description:"Le roi des cieux. Wyvern volant emblématique de la série, craint pour ses attaques de feu aériennes implacables.", icon:"🔥" },
+  { id:2,  name:"Rathian",         type:"Wyvern Volant",    element:"Feu/Poison",   weakness:"Tonnerre", game:"Monster Hunter",                  tier:"flagship", description:"La reine des terres. Contrepartie femelle du Rathalos, connue pour ses virevoltes venimeuses dévastatrices.", icon:"🌿" },
+  { id:3,  name:"Nergigante",      type:"Dragon Ancien",    element:"Néant",        weakness:"Tonnerre", game:"Monster Hunter World",             tier:"elder",    description:"Le dragon éternel. Se régénère constamment en faisant pousser des épines acérées sur son corps.", icon:"💀" },
+  { id:4,  name:"Zinogre",         type:"Wyvern Fanged",    element:"Tonnerre",     weakness:"Glace",    game:"Monster Hunter Tri G",             tier:"flagship", description:"Le loup du tonnerre. Accumule l'électricité grâce aux Fulgurbug pour déchaîner des attaques foudroyantes.", icon:"⚡" },
+  { id:5,  name:"Tigrex",          type:"Wyvern Volant",    element:"Néant",        weakness:"Tonnerre", game:"Monster Hunter Freedom 2",         tier:"flagship", description:"Prédateur primitif et agressif, capable de projeter des ondes de choc soniques dévastatrices.", icon:"🌀" },
+  { id:6,  name:"Diablos",         type:"Wyvern Terrestre", element:"Néant",        weakness:"Glace",    game:"Monster Hunter",                  tier:"flagship", description:"Titan du désert doté de deux cornes redoutables. Peut s'enfouir dans le sable pour attaquer par surprise.", icon:"🏜️" },
+  { id:7,  name:"Brachydios",      type:"Wyvern Fanged",    element:"Explosion",    weakness:"Glace",    game:"Monster Hunter Tri G",             tier:"flagship", description:"Maître des explosions vertes. Enduit ses poings de mucus explosif pour des attaques dévastatrices.", icon:"💥" },
+  { id:8,  name:"Gore Magala",     type:"Dragon Inconnu",   element:"Virus Félin",  weakness:"Feu",      game:"Monster Hunter 4",                 tier:"flagship", description:"Mystérieux dragon noir aux six membres, propagateur du Virus Félin qui altère les chasseurs.", icon:"🖤" },
+  { id:9,  name:"Mizutsune",       type:"Leviathan",        element:"Eau",          weakness:"Tonnerre", game:"Monster Hunter Generations",       tier:"flagship", description:"Gracieux léviathan qui glisse sur ses propres bulles de mousse rose aux effets enivrants.", icon:"🫧" },
+  { id:10, name:"Glavenus",        type:"Wyvern Lame",      element:"Feu",          weakness:"Eau",      game:"Monster Hunter Generations",       tier:"flagship", description:"Sa queue en forme de lame s'aiguise en la frottant contre ses dents, atteignant une chaleur extrême.", icon:"⚔️" },
+  { id:11, name:"Astalos",         type:"Wyvern Volant",    element:"Tonnerre",     weakness:"Eau",      game:"Monster Hunter Generations",       tier:"flagship", description:"Wyvern électrique aux ailes tranchantes comme des lames, maître du combat aérien foudroyant.", icon:"🦅" },
+  { id:12, name:"Gammoth",         type:"Fanged Beast",     element:"Glace",        weakness:"Feu",      game:"Monster Hunter Generations",       tier:"flagship", description:"Colossal mammifère arctique dont les pattes enduites de glace écrasent tout sur leur passage.", icon:"🐘" },
+  { id:13, name:"Velkhana",        type:"Dragon Ancien",    element:"Glace",        weakness:"Feu",      game:"MH World: Iceborne",               tier:"elder",    description:"Dragon de glace légendaire capable de figer instantanément tout ce qui l'entoure en un instant.", icon:"❄️" },
+  { id:14, name:"Namielle",        type:"Dragon Ancien",    element:"Eau/Tonnerre", weakness:"Feu",      game:"MH World: Iceborne",               tier:"elder",    description:"Dragon des abysses qui absorbe l'eau pour libérer de puissantes décharges électriques.", icon:"🌊" },
+  { id:15, name:"Malzeno",         type:"Dragon Ancien",    element:"Virus Qurio",  weakness:"Tonnerre", game:"MH Rise: Sunbreak",                tier:"elder",    description:"Dragon vampire qui draine la force vitale de ses proies grâce à son parasite Qurio.", icon:"🧛" },
+  { id:16, name:"Magnamalo",       type:"Fanged Beast",     element:"Hellfire",     weakness:"Eau",      game:"Monster Hunter Rise",              tier:"flagship", description:"Prédateur démoniaque qui absorbe les âmes de ses proies pour alimenter ses flammes infernales.", icon:"👹" },
+  { id:17, name:"Chameleos",       type:"Dragon Ancien",    element:"Poison",       weakness:"Tonnerre", game:"MH Freedom Unite",                 tier:"elder",    description:"Dragon caméléon capable de se rendre invisible et de voler les objets des chasseurs.", icon:"👻" },
+  { id:18, name:"Kushala Daora",   type:"Dragon Ancien",    element:"Vent",         weakness:"Tonnerre", game:"Monster Hunter Freedom 2",         tier:"elder",    description:"Dragon d'acier enveloppé dans une barrière permanente de vent tourbillonnant.", icon:"🌪️" },
+  { id:19, name:"Teostra",         type:"Dragon Ancien",    element:"Feu/Explosion",weakness:"Eau",      game:"Monster Hunter 2",                 tier:"elder",    description:"Roi du feu qui peut déclencher une explosion nucléaire en libérant ses poudres inflammables.", icon:"☀️" },
+  { id:20, name:"Lunastra",        type:"Dragon Ancien",    element:"Feu/Explosion",weakness:"Eau",      game:"Monster Hunter 2",                 tier:"elder",    description:"Reine du feu, compagne de Teostra, encore plus agressive et dévastatrice que lui.", icon:"🌙" },
+  { id:21, name:"Fatalis",         type:"Dragon Ancien",    element:"Feu",          weakness:"Eau",      game:"Monster Hunter",                  tier:"elder",    description:"Le Dragon Noir légendaire. La créature la plus redoutée de toute la série Monster Hunter.", icon:"🐉" },
+  { id:22, name:"Crimson Fatalis", type:"Dragon Ancien",    element:"Feu",          weakness:"Eau",      game:"Monster Hunter",                  tier:"elder",    description:"Variante rouge du Fatalis, encore plus destructrice, capable de faire fondre les armures.", icon:"🔴" },
+  { id:23, name:"White Fatalis",   type:"Dragon Ancien",    element:"Tonnerre",     weakness:"Glace",    game:"Monster Hunter",                  tier:"elder",    description:"Le Fatalis blanc d'une puissance divine, capable de foudroyer des armées entières.", icon:"⚪" },
+  { id:24, name:"Alatreon",        type:"Dragon Ancien",    element:"Tous",         weakness:"Variable", game:"Monster Hunter Tri",               tier:"elder",    description:"Dragon qui maîtrise tous les éléments. Son essence peut basculer entre feu, glace et tonnerre.", icon:"🌈" },
+  { id:25, name:"Shara Ishvalda",  type:"Dragon Ancien",    element:"Terre",        weakness:"Eau",      game:"MH World: Iceborne",               tier:"elder",    description:"Origine du Chant de la Terre, dragon géologique qui vibre à une fréquence dévastatrice.", icon:"🌍" },
+  { id:26, name:"Safi'jiiva",      type:"Dragon Ancien",    element:"Feu",          weakness:"Variable", game:"MH World: Iceborne",               tier:"elder",    description:"Forme adulte du Xeno'jiiva, dragon rouge qui absorbe l'énergie de l'écosystème entier.", icon:"♾️" },
+  { id:27, name:"Xeno'jiiva",      type:"Dragon Ancien",    element:"Feu",          weakness:"Variable", game:"Monster Hunter World",             tier:"elder",    description:"Forme juvénile née des Flux Draconiques accumulés sous New Monde.", icon:"🔮" },
+  { id:28, name:"Kulve Taroth",    type:"Dragon Ancien",    element:"Feu",          weakness:"Glace",    game:"Monster Hunter World",             tier:"elder",    description:"Dragon féminin recouvert d'or fondu qui perd périodiquement sa coque dorée.", icon:"👑" },
+  { id:29, name:"Kirin",           type:"Dragon Ancien",    element:"Tonnerre",     weakness:"Feu",      game:"Monster Hunter",                  tier:"elder",    description:"Licorne mystique qui invoque la foudre et se déplace avec une grâce surnaturelle.", icon:"🦄" },
+  { id:30, name:"Akantor",         type:"Wyvern Terrestre", element:"Néant",        weakness:"Glace",    game:"Monster Hunter Freedom 2",         tier:"elder",    description:"Le dieu noir sans ailes, dont le rugissement peut aspirer et broyer ses ennemis.", icon:"⬛" },
+  { id:31, name:"Ukanlos",         type:"Wyvern Terrestre", element:"Glace",        weakness:"Feu",      game:"MH Freedom Unite",                 tier:"elder",    description:"Colosse arctique qui brise la glace avec sa massive mâchoire inférieure.", icon:"🏔️" },
+  { id:32, name:"Rajang",          type:"Fanged Beast",     element:"Tonnerre",     weakness:"Glace",    game:"Monster Hunter 2",                 tier:"large",    description:"Primate colossal et brutal, capable de projeter des faisceaux d'énergie électrique.", icon:"🦍" },
+  { id:33, name:"Deviljho",        type:"Wyvern Terrestre", element:"Dragon",       weakness:"Tonnerre", game:"Monster Hunter Tri",               tier:"large",    description:"Prédateur insatiable qui mange même les autres grands monstres. Peut expirer du gaz draconique.", icon:"🦎" },
+  { id:34, name:"Bazelgeuse",      type:"Wyvern Volant",    element:"Explosion",    weakness:"Tonnerre", game:"Monster Hunter World",             tier:"large",    description:"Bombardier aérien qui largue des écailles explosives sur ses proies depuis les airs.", icon:"💣" },
+  { id:35, name:"Lagiacrus",       type:"Leviathan",        element:"Tonnerre",     weakness:"Feu",      game:"Monster Hunter Tri",               tier:"flagship", description:"Seigneur des mers électrique, terrifiant prédateur qui règne sur les océans.", icon:"🐊" },
+  { id:36, name:"Barioth",         type:"Wyvern Volant",    element:"Glace",        weakness:"Tonnerre", game:"Monster Hunter Tri",               tier:"large",    description:"Wyvern agile du blizzard, glisse à toute vitesse sur la glace grâce à ses griffes tranchantes.", icon:"🌨️" },
+  { id:37, name:"Seregios",        type:"Wyvern Volant",    element:"Néant",        weakness:"Tonnerre", game:"MH 4 Ultimate",                    tier:"large",    description:"Wyvern solitaire et territorial couvert d'écailles tranchantes qu'il projette comme des lames.", icon:"🗡️" },
+  { id:38, name:"Yian Garuga",     type:"Wyvern Volant",    element:"Poison",       weakness:"Tonnerre", game:"Monster Hunter",                  tier:"large",    description:"Wyvern noir agressif et vénéneux, considéré comme l'un des plus difficiles de la série.", icon:"🦜" },
+  { id:39, name:"Anjanath",        type:"Wyvern Fanged",    element:"Feu",          weakness:"Eau",      game:"Monster Hunter World",             tier:"large",    description:"Prédateur tyrannosaure qui déploie ses membranes nasales et souffle du feu quand il est enragé.", icon:"🦖" },
+  { id:40, name:"Odogaron",        type:"Wyvern Fanged",    element:"Néant",        weakness:"Glace",    game:"Monster Hunter World",             tier:"large",    description:"Prédateur rapace aux griffes profondes qui provoque des saignements incontrôlables.", icon:"🩸" },
+  { id:41, name:"Tobi-Kadachi",    type:"Wyvern Fanged",    element:"Tonnerre",     weakness:"Eau",      game:"Monster Hunter World",             tier:"large",    description:"Écureuil géant électrique qui plane entre les arbres et accumule l'électricité statique.", icon:"🐿️" },
+  { id:42, name:"Legiana",         type:"Wyvern Volant",    element:"Glace",        weakness:"Tonnerre", game:"Monster Hunter World",             tier:"large",    description:"Wyvern gracieux des hauteurs qui chante de belles mélodies et contrôle les courants d'air glacés.", icon:"🕊️" },
+  { id:43, name:"Pukei-Pukei",     type:"Wyvern Volant",    element:"Poison",       weakness:"Tonnerre", game:"Monster Hunter World",             tier:"large",    description:"Wyvern caméléon qui avale des herbes et baies pour produire et cracher un venin toxique.", icon:"🐸" },
+  { id:44, name:"Paolumu",         type:"Wyvern Fanged",    element:"Néant",        weakness:"Feu",      game:"Monster Hunter World",             tier:"large",    description:"Chauve-souris qui gonfle sa gorge pour flotter dans les airs et crache des rafales d'air.", icon:"🦇" },
+  { id:45, name:"Tzitzi-Ya-Ku",    type:"Wyvern Volant",    element:"Néant",        weakness:"Tonnerre", game:"Monster Hunter World",             tier:"large",    description:"Wyvern côtier qui émet des flashs éblouissants pour aveugler et paralyser ses ennemis.", icon:"🔆" },
+  { id:46, name:"Jyuratodus",      type:"Leviathan",        element:"Eau",          weakness:"Tonnerre", game:"Monster Hunter World",             tier:"large",    description:"Léviathan qui nage dans la boue, pouvant recouvrir ses écailles de vase pour une protection accrue.", icon:"🌊" },
+  { id:47, name:"Radobaan",        type:"Wyvern Terrestre", element:"Sommeil",      weakness:"Dragon",   game:"Monster Hunter World",             tier:"large",    description:"Armadillo géant couvert d'os qui se roule en boule pour écraser ses ennemis.", icon:"🦔" },
+  { id:48, name:"Vaal Hazak",      type:"Dragon Ancien",    element:"Dragon/Miasme",weakness:"Dragon",   game:"Monster Hunter World",             tier:"elder",    description:"Dragon nécromancien qui vit dans les Terres Putréfiées, entouré de carcasses et miasmes.", icon:"☠️" },
+  { id:49, name:"Barroth",         type:"Wyvern Terrestre", element:"Boue",         weakness:"Feu",      game:"Monster Hunter Tri",               tier:"large",    description:"Wyvern du désert qui se couvre de boue pour se protéger de la chaleur et attaquer.", icon:"🟫" },
+  { id:50, name:"Ludroth Royal",   type:"Leviathan",        element:"Eau",          weakness:"Tonnerre", game:"Monster Hunter Tri",               tier:"large",    description:"Chef de meute des Ludroth, capable de régénérer sa crinière éponge pour absorber des dégâts.", icon:"🦁" },
+  { id:51, name:"Almudron",        type:"Leviathan",        element:"Eau",          weakness:"Tonnerre", game:"Monster Hunter Rise",              tier:"large",    description:"Léviathan qui nage dans la boue dorée, capturant ses proies dans des pièges de vase.", icon:"🟡" },
+  { id:52, name:"Somnacanth",      type:"Leviathan",        element:"Sommeil",      weakness:"Tonnerre", game:"Monster Hunter Rise",              tier:"large",    description:"Léviathan envoûtant qui utilise des substances soporifiques pour plonger ses proies dans le sommeil.", icon:"🌀" },
+  { id:53, name:"Ibushi",          type:"Dragon Ancien",    element:"Vent",         weakness:"Tonnerre", game:"Monster Hunter Rise",              tier:"elder",    description:"Dragon du ciel qui contrôle les courants d'air et se déplace avec une grâce céleste.", icon:"🌬️" },
+  { id:54, name:"Narwa",           type:"Dragon Ancien",    element:"Tonnerre",     weakness:"Eau",      game:"Monster Hunter Rise",              tier:"elder",    description:"Dragon de la foudre, reine du tonnerre qui libère des tempêtes électriques dévastatrices.", icon:"⛈️" },
+  { id:55, name:"Gaismagorm",      type:"Dragon Ancien",    element:"Dragon",       weakness:"Dragon",   game:"MH Rise: Sunbreak",                tier:"elder",    description:"Colosse souterrain qui se nourrit des parasites Qurio et libère une énergie draconique colossale.", icon:"🕳️" },
+  { id:56, name:"Espinas",         type:"Wyvern Volant",    element:"Feu/Poison",   weakness:"Glace",    game:"MH Rise: Sunbreak",                tier:"large",    description:"Wyvern couvert d'épines venimeuses qui préfère éviter les conflits mais devient dévastateur si provoqué.", icon:"🌵" },
+  { id:57, name:"Garangolm",       type:"Fanged Beast",     element:"Feu/Eau",      weakness:"Tonnerre", game:"MH Tri G",                         tier:"large",    description:"Gorille colossale qui peut enflammer ou glacer ses poings selon les mousses qui le recouvrent.", icon:"🦴" },
+  { id:58, name:"Zinogre Stygian", type:"Wyvern Fanged",    element:"Dragon",       weakness:"Dragon",   game:"MH Tri G",                         tier:"large",    description:"Variante sombre du Zinogre qui canalise l'énergie draconique au lieu de l'électricité.", icon:"🌑" },
+  { id:59, name:"Brachydios Raging",type:"Wyvern Fanged",   element:"Explosion",    weakness:"Glace",    game:"MH World: Iceborne",               tier:"large",    description:"Forme enragée du Brachydios, dont les explosions sont d'une violence et d'une vitesse absolument terrifiantes.", icon:"🟢" },
+  { id:60, name:"Savage Deviljho", type:"Wyvern Terrestre", element:"Dragon",       weakness:"Dragon",   game:"Monster Hunter Tri",               tier:"large",    description:"Variante du Deviljho sombré dans une rage permanente, encore plus destructrice et imprévisible.", icon:"🔥" },
+];
+
+// Populate filter dropdowns
+const games = [...new Set(MONSTERS.map(m => m.game))].sort();
+const types = [...new Set(MONSTERS.map(m => m.type))].sort();
+const gameSelect = document.getElementById('filterGame');
+const typeSelect = document.getElementById('filterType');
+games.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; gameSelect.appendChild(o); });
+types.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; typeSelect.appendChild(o); });
+
+let currentMonsters = [...MONSTERS];
+
+function applyFilters() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const tier = document.getElementById('filterTier').value;
+  const game = document.getElementById('filterGame').value;
+  const type = document.getElementById('filterType').value;
+
+  currentMonsters = MONSTERS.filter(m => {
+    const s = m.name.toLowerCase().includes(search) ||
+              m.type.toLowerCase().includes(search) ||
+              m.element.toLowerCase().includes(search);
+    return s &&
+      (tier === 'all' || m.tier === tier) &&
+      (game === 'all' || m.game === game) &&
+      (type === 'all' || m.type === type);
+  });
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('monstersGrid');
+  const empty = document.getElementById('emptyState');
+  const count = document.getElementById('resultCount');
+
+  count.textContent = currentMonsters.length + ' monstre' + (currentMonsters.length > 1 ? 's' : '');
+
+  if (currentMonsters.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = currentMonsters.map((m, i) => {
+    const t = TIERS[m.tier];
+    return `
+      <div class="monster-card" onclick="openModal(${m.id})" style="border: 1px solid ${t.color}30; animation-delay: ${i * 0.02}s">
+        <div class="card-stripe" style="background: linear-gradient(90deg, transparent, ${t.color}, transparent)"></div>
+        <span class="card-icon">${m.icon}</span>
+        <div class="card-name">${m.name}</div>
+        <div class="card-type">${m.type}</div>
+        <div class="card-badges">
+          <span class="badge" style="background:${t.bg}; color:${t.color}; border:1px solid ${t.color}44">${t.label}</span>
+          <span class="badge" style="background:rgba(255,100,30,0.1); color:#ff8844; border:1px solid rgba(255,100,30,0.3)">🔥 ${m.element}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openModal(id) {
+  const m = MONSTERS.find(x => x.id === id);
+  const t = TIERS[m.tier];
+
+  document.getElementById('modalStripe').style.background =
+    `linear-gradient(90deg, transparent, ${t.color}, transparent)`;
+  document.getElementById('modalBox').style.boxShadow = `0 0 60px ${t.color}22`;
+  document.getElementById('modalIcon').textContent = m.icon;
+  document.getElementById('modalName').textContent = m.name;
+  document.getElementById('modalMeta').textContent = `${m.type} — ${m.game}`;
+  document.getElementById('modalDesc').textContent = m.description;
+  document.getElementById('modalStats').innerHTML = `
+    <div class="stat-box">
+      <div class="stat-label">⚡ Élément</div>
+      <div class="stat-value" style="color:#ff8844">${m.element}</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">🎯 Faiblesse</div>
+      <div class="stat-value" style="color:#44ccff">${m.weakness}</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">🏆 Catégorie</div>
+      <div class="stat-value" style="color:${t.color}">${t.label}</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">📖 Type</div>
+      <div class="stat-value">${m.type}</div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on ESC
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+
+// Initial render
+renderGrid();
+</script>
+</body>
+</html>
