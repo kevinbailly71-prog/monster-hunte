@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="theme-color" content="#0a0805"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MH Encyclopédie"/>
+<title>Monster Hunter — Encyclopédie</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{--gold:#c8922a;--gold-light:#e8c070;--gold-dim:#8a6030;--bg:#0a0805;--text:#e8d5b0;--text-dim:#9a8060;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Text',serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 15%,rgba(180,60,0,0.12) 0%,transparent 55%),radial-gradient(ellipse at 85% 85%,rgba(100,30,0,0.15) 0%,transparent 55%);pointer-events:none;z-index:0;}
+header{position:sticky;top:0;z-index:50;background:rgba(8,5,2,0.97);border-bottom:1px solid rgba(180,120,40,0.25);backdrop-filter:blur(12px);padding:14px 20px;}
+.hi{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.hd{font-size:36px;filter:drop-shadow(0 0 12px rgba(220,140,40,0.6));}
+.ht{font-family:'Cinzel',serif;font-size:clamp(16px,4vw,26px);font-weight:900;color:var(--gold-light);letter-spacing:0.12em;text-transform:uppercase;text-shadow:0 0 20px rgba(220,140,40,0.4);}
+.hs{font-size:11px;color:var(--text-dim);letter-spacing:0.25em;text-transform:uppercase;font-family:'Cinzel',serif;}
+.fw{position:relative;z-index:10;max-width:1200px;margin:20px auto;padding:0 16px;}
+.fb{background:rgba(18,10,3,0.85);border:1px solid rgba(140,90,30,0.25);border-radius:10px;padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.si{flex:1 1 200px;background:rgba(0,0,0,0.5);border:1px solid rgba(140,90,30,0.35);border-radius:6px;padding:10px 14px;color:var(--text);font-size:15px;font-family:'Crimson Text',serif;outline:none;}
+.si::placeholder{color:var(--text-dim);}
+select{flex:1 1 140px;background:rgba(0,0,0,0.6);border:1px solid rgba(140,90,30,0.35);border-radius:6px;padding:10px 12px;color:var(--text);font-size:13px;font-family:'Crimson Text',serif;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a6030' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+select option{background:#1a0d04;}
+.rc{font-size:12px;color:var(--text-dim);white-space:nowrap;font-family:'Cinzel',serif;}
+.gw{position:relative;z-index:10;max-width:1200px;margin:0 auto;padding:0 16px 40px;}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+@media(max-width:400px){.mg{grid-template-columns:repeat(2,1fr);}}
+.mc{background:rgba(12,7,2,0.92);border-radius:8px;padding:14px 12px;cursor:pointer;transition:transform 0.18s;position:relative;overflow:hidden;animation:fi 0.3s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.mc:hover,.mc:active{transform:translateY(-3px);}
+.cs{position:absolute;top:0;left:0;right:0;height:2px;}
+.ci{font-size:28px;margin-bottom:8px;display:block;}
+.cn{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--gold-light);margin-bottom:3px;line-height:1.3;}
+.ct{font-size:11px;color:var(--text-dim);margin-bottom:8px;}
+.cb{display:flex;flex-wrap:wrap;gap:4px;}
+.badge{font-size:10px;padding:2px 7px;border-radius:10px;font-family:'Cinzel',serif;}
+.kb{position:absolute;top:8px;right:8px;background:rgba(200,50,50,0.2);border:1px solid rgba(200,50,50,0.4);border-radius:10px;padding:2px 7px;font-size:11px;color:#ff7777;font-family:'Cinzel',serif;font-weight:700;}
+.mo{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.88);align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);}
+.mo.open{display:flex;}
+.mb{background:linear-gradient(145deg,#160e04,#0a0805);border-radius:12px;padding:28px 24px;max-width:520px;width:100%;position:relative;max-height:90vh;overflow-y:auto;animation:mi 0.25s ease;}
+@keyframes mi{from{opacity:0;transform:scale(0.93) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.ms{position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;}
+.mcl{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text-dim);font-size:22px;cursor:pointer;padding:4px 8px;}
+.mico{font-size:52px;margin-bottom:12px;display:block;}
+.mn{font-family:'Cinzel',serif;font-size:24px;font-weight:900;color:var(--gold-light);margin-bottom:4px;}
+.mm{font-size:13px;color:var(--text-dim);margin-bottom:16px;}
+.md{font-size:15px;color:#c4a870;line-height:1.8;margin-bottom:20px;font-style:italic;}
+.st{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);margin:18px 0 10px;border-bottom:1px solid rgba(140,90,30,0.2);padding-bottom:6px;}
+.mst{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sb{background:rgba(0,0,0,0.35);border:1px solid rgba(140,90,30,0.2);border-radius:6px;padding:10px 12px;}
+.sl{font-size:10px;color:#6a5040;text-transform:uppercase;letter-spacing:0.12em;font-family:'Cinzel',serif;margin-bottom:4px;}
+.sv{font-size:14px;font-weight:600;font-family:'Cinzel',serif;}
+.gl{display:flex;flex-wrap:wrap;gap:6px;}
+.gp{padding:4px 10px;border-radius:6px;font-size:11px;font-family:'Cinzel',serif;background:rgba(140,90,30,0.15);border:1px solid rgba(140,90,30,0.3);color:var(--gold-dim);}
+.zl{display:flex;flex-wrap:wrap;gap:6px;}
+.zp{padding:5px 11px;border-radius:6px;font-size:11px;font-family:'Cinzel',serif;background:rgba(30,80,50,0.2);border:1px solid rgba(60,140,80,0.3);color:#88ddaa;}
+.al{display:flex;flex-direction:column;gap:6px;}
+.ai{background:rgba(0,0,0,0.3);border:1px solid rgba(68,170,255,0.2);border-radius:6px;padding:8px 12px;font-size:13px;color:#88ccff;font-family:'Cinzel',serif;}
+.ai span{color:var(--text-dim);font-size:11px;display:block;margin-top:2px;font-family:'Crimson Text',serif;}
+.kc{display:flex;align-items:center;gap:12px;background:rgba(180,30,30,0.12);border:1px solid rgba(180,30,30,0.3);border-radius:8px;padding:12px 16px;}
+.kd{font-family:'Cinzel',serif;font-size:32px;font-weight:900;color:#ff6644;min-width:50px;text-align:center;transition:transform 0.15s;}
+.kl{font-size:12px;color:var(--text-dim);font-family:'Cinzel',serif;letter-spacing:0.1em;}
+.kbs{display:flex;gap:8px;margin-left:auto;}
+.kb2{width:36px;height:36px;border-radius:50%;border:none;font-size:18px;cursor:pointer;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:transform 0.1s;}
+.kb2:active{transform:scale(0.9);}
+.km{background:rgba(100,30,30,0.5);color:#ff8888;border:1px solid rgba(200,60,60,0.3);}
+.kp{background:rgba(180,60,30,0.5);color:#ffaa88;border:1px solid rgba(220,100,60,0.4);}
+.kr{background:rgba(50,50,50,0.5);color:#888;border:1px solid rgba(100,100,100,0.3);font-size:13px;border-radius:6px;width:auto;padding:0 10px;height:36px;font-family:'Cinzel',serif;}
+.es{text-align:center;padding:60px 20px;color:#4a3020;}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:3px;}
+</style>
+</head>
+<body>
+<header><div class="hi"><span class="hd">🐉</span><div><div class="ht">Monster Hunter</div><div class="hs">Encyclopédie des Monstres</div></div></div></header>
+<div class="fw"><div class="fb">
+  <input class="si" id="sI" type="text" placeholder="🔍 Rechercher un monstre..." oninput="af()"/>
+  <select id="fT" onchange="af()"><option value="all">Tous les niveaux</option><option value="flagship">⭐ Emblématique</option><option value="elder">🔴 Dragon Ancien</option><option value="large">🔵 Grand Monstre</option></select>
+  <select id="fG" onchange="af()"></select>
+  <select id="fTy" onchange="af()"></select>
+  <span class="rc" id="rc"></span>
+</div></div>
+<div class="gw"><div class="mg" id="mg"></div><div class="es" id="es" style="display:none"><span style="font-size:48px;display:block;margin-bottom:12px">🏕️</span><p style="font-family:'Cinzel',serif">Aucun monstre trouvé</p></div></div>
+<div class="mo" id="mo" onclick="cm(event)">
+  <div class="mb" id="mbox">
+    <div class="ms" id="mst2"></div>
+    <button class="mcl" onclick="cmd()">✕</button>
+    <span class="mico" id="mico"></span>
+    <div class="mn" id="mname"></div>
+    <div class="mm" id="mmeta"></div>
+    <div class="md" id="mdesc"></div>
+    <div id="mcont"></div>
+  </div>
+</div>
+<script>
+var T={flagship:{l:"Emblématique",c:"#FFD700",b:"rgba(255,215,0,0.13)"},elder:{l:"Dragon Ancien",c:"#FF4444",b:"rgba(255,68,68,0.13)"},large:{l:"Grand Monstre",c:"#44AAFF",b:"rgba(68,170,255,0.13)"}};
+var EC={"Feu":"#ff6633","Eau":"#33aaff","Tonnerre":"#ffdd33","Glace":"#aaddff","Dragon":"#cc44ff","Poison":"#88ff44","Vent":"#aaffcc","Explosion":"#ffaa33","Goudron":"#aa8833","Néant":"#888888"};
+function ec(e){for(var k in EC)if(e.indexOf(k)>=0)return EC[k];return"#aaa";}
+function st(n){return"★★★".slice(0,n)+"☆☆☆".slice(0,3-n);}
+var kills={};
+try{kills=JSON.parse(localStorage.getItem("mh_kills")||"{}");}catch(e){}
+function sk(){try{localStorage.setItem("mh_kills",JSON.stringify(kills));}catch(e){}}
+
+var M=[
+{id:1,name:"Rathalos",type:"Wyvern Volant",element:"Feu",icon:"🔥",tier:"flagship",
+desc:"Le Roi des Cieux, monstre emblématique de toute la franchise. Ce wyvern aux écailles rouge sang domine les écosystèmes aériens depuis des millénaires, établissant son territoire au sommet des montagnes. Il enchaîne plongeons dévastateurs avec griffes enflammées, crache des boules de feu depuis les airs et peut empoisonner ses proies avec ses serres arrière. Sa présence au-dessus d'une zone est signe de danger absolu. Son rugissement paralyse momentanément tout chasseur à portée.",
+fw:[{e:"Tonnerre",n:3},{e:"Dragon",n:2},{e:"Glace",n:1}],
+jeux:["Monster Hunter","MH Freedom","MH Freedom 2","MH Freedom Unite","MH Tri","MH Tri G","MH 4","MH 4 Ultimate","MH Generations","MH Generations Ultimate","MH World","MH World Iceborne","MH Rise","MH Rise Sunbreak","MH Wilds"],
+zones:[{n:"Forêt et Collines",i:"🌲"},{n:"Montagne Enflammée",i:"🌋"},{n:"Ancienne Forêt",i:"🌿"},{n:"Terres Corallines",i:"🪸"}],
+armures:[{n:"Armure Rathalos",t:"Normale",b:"Attaque feu +15, Résistance feu"},{n:"Armure Rathalos S",t:"Améliorée",b:"Maître du feu, Esquive+"},{n:"Armure Rathalos X",t:"Expert",b:"Dieu du feu, Boost attaque critique"}]},
+
+{id:2,name:"Rathian",type:"Wyvern Volant",element:"Feu/Poison",icon:"🌿",tier:"flagship",
+desc:"La Reine des Terres, contrepartie femelle du Rathalos. Elle préfère patrouiller au sol pour protéger ses oeufs. Redoutable combattante, célèbre pour sa virevolte venimeuse : elle se retourne brutalement pour frapper avec sa queue chargée d'un venin parmi les plus puissants du bestiaire. Elle crache des boules de feu avec une précision effrayante et ses charges sont imprévisibles.",
+fw:[{e:"Tonnerre",n:3},{e:"Dragon",n:2},{e:"Glace",n:1}],
+jeux:["Monster Hunter","MH Freedom","MH Freedom 2","MH Freedom Unite","MH Tri","MH Tri G","MH 4","MH 4 Ultimate","MH Generations","MH World","MH Rise","MH Wilds"],
+zones:[{n:"Forêt et Collines",i:"🌲"},{n:"Plaines de Sable",i:"🏜️"},{n:"Ancienne Forêt",i:"🌿"}],
+armures:[{n:"Armure Rathian",t:"Normale",b:"Résistance poison, Protection renforcée"},{n:"Armure Rathian S",t:"Améliorée",b:"Immunité poison, Vitalité+"}]},
+
+{id:3,name:"Nergigante",type:"Dragon Ancien",element:"Néant",icon:"💀",tier:"elder",
+desc:"Le Dragon Éternel, Dragon Ancien d'une agressivité sans pareil. Sa capacité de régénération est terrifiante : des épines noires et blanches poussent en permanence sur son corps, et lorsqu'elles durcissent, ses attaques deviennent encore plus dévastatrices. Il est l'un des rares Anciens à attaquer activement d'autres Dragons Anciens pour se nourrir de leur énergie. Son plongeon terrestre crée une onde de choc qui étourdit tous les chasseurs dans un large rayon.",
+fw:[{e:"Tonnerre",n:3},{e:"Dragon",n:2},{e:"Feu",n:1}],
+jeux:["MH World","MH World Iceborne"],
+zones:[{n:"Terres Putréfiées",i:"☠️"},{n:"Terres Corallines",i:"🪸"},{n:"Zone de Convergence",i:"⚡"}],
+armures:[{n:"Armure Nergigante",t:"Normale",b:"Régénération, Attaque critique"},{n:"Armure Nergigante β",t:"Améliorée",b:"Percée critique, Endurance+"}]},
+
+{id:4,name:"Zinogre",type:"Wyvern Fanged",element:"Tonnerre",icon:"⚡",tier:"flagship",
+desc:"Le Loup du Tonnerre, l'un des monstres les plus appréciés des fans. Il accumule l'électricité en attirant des Fulgurbug dans sa fourrure. À pleine charge, son pelage brille d'un éclat bleu électrique aveuglant et ses attaques libèrent des décharges paralysantes. Sa mobilité est exceptionnelle : il bondit et pirouette avec une grâce féline qui contraste avec sa puissance brute. Dompter le Zinogre est un rite de passage pour tout chasseur sérieux.",
+fw:[{e:"Glace",n:3},{e:"Eau",n:2},{e:"Feu",n:1}],
+jeux:["MH Tri G","MH 4 Ultimate","MH Generations","MH Generations Ultimate","MH World Iceborne","MH Rise","MH Rise Sunbreak"],
+zones:[{n:"Toundra",i:"❄️"},{n:"Collines Boisées",i:"🌲"},{n:"Sanctuaire de Givre",i:"🏔️"}],
+armures:[{n:"Armure Zinogre",t:"Normale",b:"Tonnerre +20, Vitesse+"},{n:"Armure Zinogre S",t:"Améliorée",b:"Foudre divine, Esquive éclair"}]},
+
+{id:5,name:"Tigrex",type:"Wyvern Volant",element:"Néant",icon:"🌀",tier:"flagship",
+desc:"L'un des wyverns les plus anciens et primitifs. Ses membres antérieurs lui servent autant d'ailes que de pattes. Son rugissement est d'une puissance dévastatrice : il peut projeter des ondes de choc soniques visibles capables de pulvériser des rochers. Il enchaîne les charges à une vitesse qui surprend même les chasseurs les plus expérimentés. Prédateur dont la morphologie n'a pas évolué depuis des millions d'années, il incarne la survie du plus fort.",
+fw:[{e:"Tonnerre",n:3},{e:"Glace",n:2},{e:"Eau",n:1}],
+jeux:["MH Freedom 2","MH Freedom Unite","MH Tri G","MH 4 Ultimate","MH Generations","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Toundra",i:"❄️"},{n:"Désert",i:"🏜️"},{n:"Sanctuaire de Givre",i:"🏔️"}],
+armures:[{n:"Armure Tigrex",t:"Normale",b:"Force brute, Attaque+"},{n:"Armure Tigrex S",t:"Améliorée",b:"Rugissement dévastateur, Puissance max"}]},
+
+{id:6,name:"Diablos",type:"Wyvern Terrestre",element:"Néant",icon:"🏜️",tier:"flagship",
+desc:"Le Titan incontesté du désert. Ses deux cornes imposantes lui servent d'armes et d'outils pour s'enfoncer dans le sable à une vitesse surprenante. Il peut disparaître sous le sol et ressurgir juste sous les pieds des chasseurs. Ses charges sont parmi les plus redoutables du jeu. C'est un herbivore, mais d'une agressivité extrême envers tout intrus. Les femelles Black Diablos sont encore plus dangereuses car en période de rut.",
+fw:[{e:"Glace",n:3},{e:"Eau",n:2},{e:"Tonnerre",n:1}],
+jeux:["Monster Hunter","MH Freedom","MH Freedom 2","MH Freedom Unite","MH Tri G","MH 4","MH 4 Ultimate","MH Generations","MH World","MH Rise Sunbreak"],
+zones:[{n:"Désert",i:"🏜️"},{n:"Plaines de Sable",i:"🌵"},{n:"Dunes Arides",i:"☀️"}],
+armures:[{n:"Armure Diablos",t:"Normale",b:"Force des cornes, Défense+"},{n:"Armure Diablos S",t:"Améliorée",b:"Titan du désert, Résistance choc max"}]},
+
+{id:7,name:"Brachydios",type:"Wyvern Fanged",element:"Explosion",icon:"💥",tier:"flagship",
+desc:"L'un des monstres les plus originaux. Ses poings sont recouverts d'un mucus vert vif qui crée des explosions puissantes au contact de l'air. Il enduit le sol de slime explosif puis déclenche les explosions stratégiquement. Les projections adhèrent aux armures et explosent après quelques secondes. Sa forme enragée est l'un des combats les plus éprouvants de la série : explosions quasi instantanées couvrant une zone immense.",
+fw:[{e:"Glace",n:3},{e:"Eau",n:2},{e:"Tonnerre",n:1}],
+jeux:["MH Tri G","MH 4 Ultimate","MH Generations Ultimate","MH World Iceborne"],
+zones:[{n:"Toundra",i:"❄️"},{n:"Cavernes de Lave",i:"🌋"}],
+armures:[{n:"Armure Brachydios",t:"Normale",b:"Explosion +15, Blast+"},{n:"Armure Brachydios S",t:"Améliorée",b:"Maestro blast, Attaque critique"}]},
+
+{id:8,name:"Gore Magala",type:"Dragon Inconnu",element:"Virus Félin",icon:"🖤",tier:"flagship",
+desc:"Le monstre le plus mystérieux de Monster Hunter 4. Classifié Inconnu car sa biologie ne correspond à aucune catégorie, il possède six membres dont deux servent d'antennes sensorielles compensant sa cécité totale. Il répand le Virus Félin qui altère d'abord la perception des chasseurs avant de décupler temporairement leur puissance au risque de les rendre fous. Les monstres contaminés deviennent incontrôlables et hyperagressifs.",
+fw:[{e:"Feu",n:3},{e:"Tonnerre",n:2}],
+jeux:["MH 4","MH 4 Ultimate","MH Generations Ultimate","MH Rise Sunbreak"],
+zones:[{n:"Tour",i:"🏰"},{n:"Ruines Oubliées",i:"🏛️"},{n:"Sanctuaire Obscur",i:"🌑"}],
+armures:[{n:"Armure Gore Magala",t:"Normale",b:"Virus Félin maîtrisé, Puissance obscure"},{n:"Armure Chaotique",t:"Spéciale",b:"Frénésie transcendée, Attaque max"}]},
+
+{id:9,name:"Mizutsune",type:"Leviathan",element:"Eau",icon:"🫧",tier:"flagship",
+desc:"Le léviathan le plus gracieux de la série. Il ressemble à un renard des neiges aquatique et se déplace avec une élégance presque chorégraphiée. Sa mousse rose aux effets particuliers affecte les déplacements des chasseurs, les faisant glisser de manière incontrôlable. Il se propulse à des vitesses fulgurantes sur cette mousse avec une fluidité hypnotique. Son apparence apaisante masque un prédateur redoutable aux réflexes extraordinaires.",
+fw:[{e:"Tonnerre",n:3},{e:"Feu",n:2},{e:"Dragon",n:1}],
+jeux:["MH Generations","MH Generations Ultimate","MH Rise","MH Rise Sunbreak","MH Wilds"],
+zones:[{n:"Zone Humide",i:"💧"},{n:"Forêt Brumeuse",i:"🌫️"},{n:"Plaines Inondées",i:"🌊"}],
+armures:[{n:"Armure Mizutsune",t:"Normale",b:"Glissement maîtrisé, Eau +20"},{n:"Armure Mizutsune X",t:"Expert",b:"Grâce aquatique, Esquive parfaite"}]},
+
+{id:10,name:"Glavenus",type:"Wyvern Lame",element:"Feu",icon:"⚔️",tier:"flagship",
+desc:"L'Épée Vivante : sa queue est une lame biologique aussi tranchante que les meilleures armes forgées. Il l'aiguise en la frottant contre ses dents, portant la lame à une chaleur extrême capable de trancher le métal. Ses rotations et virevoltes tranchantes couvrent un rayon impressionnant. Lorsqu'il est enragé, sa queue rougit au blanc et ses coups laissent des traces de feu dans l'air.",
+fw:[{e:"Eau",n:3},{e:"Glace",n:2},{e:"Dragon",n:1}],
+jeux:["MH Generations","MH Generations Ultimate","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Forêt Dense",i:"🌲"},{n:"Zone Volcanique",i:"🌋"},{n:"Sanctuaire Ardent",i:"🔥"}],
+armures:[{n:"Armure Glavenus",t:"Normale",b:"Lame ardente, Tranchant+"},{n:"Armure Glavenus S",t:"Améliorée",b:"Maître tranchant, Feu critique"}]},
+
+{id:11,name:"Astalos",type:"Wyvern Volant",element:"Tonnerre",icon:"🦅",tier:"flagship",
+desc:"Wyvern volant électrique dont les ailes sont aussi tranchantes que des lames de rasoir. Il génère sa propre électricité et peut l'accumuler pour déclencher des décharges massives. Ses ailes biseautées lui permettent de trancher ses proies lors de passages aériens avec une précision chirurgicale. À pleine charge, son corps entier irradie d'électricité bleue et ses mouvements laissent des traînées de foudre.",
+fw:[{e:"Eau",n:3},{e:"Glace",n:2}],
+jeux:["MH Generations","MH Generations Ultimate"],
+zones:[{n:"Collines Brumeuses",i:"🌫️"},{n:"Falaises Électriques",i:"⚡"}],
+armures:[{n:"Armure Astalos",t:"Normale",b:"Tonnerre aérien, Attaque ailes"}]},
+
+{id:12,name:"Gammoth",type:"Fanged Beast",element:"Glace",icon:"🐘",tier:"flagship",
+desc:"Bête immense aux allures de mammouth préhistorique. Elle recouvre ses pattes massives de glace, créant des extensions capables d'écraser tout sous elles avec une force terrifiante. Ses charges secouent le sol et ses piétinements peuvent tuer instantanément. Il aspire la neige et la recrache sous forme de projectiles glacés ou de tempêtes réduisant la visibilité.",
+fw:[{e:"Feu",n:3},{e:"Tonnerre",n:2}],
+jeux:["MH Generations","MH Generations Ultimate"],
+zones:[{n:"Toundra Gelée",i:"❄️"},{n:"Plaines Arctiques",i:"🏔️"}],
+armures:[{n:"Armure Gammoth",t:"Normale",b:"Résistance glace max, Défense colossale"}]},
+
+{id:13,name:"Velkhana",type:"Dragon Ancien",element:"Glace",icon:"❄️",tier:"elder",
+desc:"La Reine de Givre, Dragon Ancien d'une élégance glaciale absolue. Elle peut instantanément figer tout ce qui l'entoure en expirant un souffle d'une froideur surnaturelle. Sa queue crée des stalactites en secondes, modifiant le terrain de combat. Elle construit progressivement une cage de glace autour des chasseurs. Associée à une légende d'une reine glaciale qui aurait figé une cité entière en une nuit.",
+fw:[{e:"Feu",n:3},{e:"Dragon",n:2},{e:"Tonnerre",n:1}],
+jeux:["MH World Iceborne"],
+zones:[{n:"Sanctuaire de Givre",i:"🏔️"},{n:"Toundra Gelée",i:"❄️"},{n:"Cavernes de Glace",i:"🧊"}],
+armures:[{n:"Armure Velkhana",t:"Normale",b:"Glace divine, Critique élémentaire"},{n:"Armure Velkhana β",t:"Améliorée",b:"Reine de givre, Résistance max"}]},
+
+{id:14,name:"Namielle",type:"Dragon Ancien",element:"Eau/Tonnerre",icon:"🌊",tier:"elder",
+desc:"Dragon Ancien des abysses dont l'apparence rappelle une raie manta bioluminescente. Il absorbe activement l'humidité pour la stocker dans ses organes, puis libère cette eau chargée d'électricité en décharges dévastatrices. L'arène se remplit progressivement d'eau qu'il contrôle à volonté, transformant le sol en conducteur électrique. L'un des Dragons Anciens les plus complexes à affronter.",
+fw:[{e:"Feu",n:3},{e:"Dragon",n:2}],
+jeux:["MH World Iceborne"],
+zones:[{n:"Terres Corallines",i:"🪸"},{n:"Abysses Marins",i:"🌊"},{n:"Grottes Lumineuses",i:"💙"}],
+armures:[{n:"Armure Namielle",t:"Normale",b:"Flux élémentaire dual, Eau+Tonnerre"},{n:"Armure Namielle β",t:"Améliorée",b:"Maîtrise abyssale, Critique élém."}]},
+
+{id:15,name:"Malzeno",type:"Dragon Ancien",element:"Virus Qurio",icon:"🧛",tier:"elder",
+desc:"Le Dragon Vampire de Sunbreak. Il utilise des parasites Qurio pour drainer la force vitale de ses proies et la canaliser en énergie pure. Il peut invoquer des nuées de Qurio qui affaiblissent les chasseurs progressivement, forçant un style de jeu agressif. Sa version Bloodblight est particulièrement redoutée : la barre de vie diminue lentement sauf si on frappe le monstre. Représente une menace d'extinction car les Qurio peuvent parasiter toute vie.",
+fw:[{e:"Tonnerre",n:3},{e:"Dragon",n:2}],
+jeux:["MH Rise Sunbreak"],
+zones:[{n:"Ruines d'Elgado",i:"🏰"},{n:"Terres Écarlates",i:"🔴"}],
+armures:[{n:"Armure Malzeno",t:"Normale",b:"Drain vital offensif, Attaque dragon"},{n:"Armure Malzeno X",t:"Expert",b:"Seigneur Qurio, Puissance draconique max"}]},
+
+{id:16,name:"Magnamalo",type:"Fanged Beast",element:"Hellfire",icon:"👹",tier:"flagship",
+desc:"Le Tigre Démoniaque, mascotte de Monster Hunter Rise. Il absorbe et accumule les âmes des créatures tuées sous forme d'une flamme violette appelée Hellfire. Cette énergie spectrale lui permet de déclencher des explosions différées et de projeter des jets de feu démoniaque persistants. Il plante d'abord des mines de Hellfire dans le sol avant de charger pour les déclencher. Sa forme enragée transforme ses flammes en une tempête couvrant tout l'espace.",
+fw:[{e:"Eau",n:3},{e:"Glace",n:2},{e:"Tonnerre",n:1}],
+jeux:["MH Rise","MH Rise Sunbreak"],
+zones:[{n:"Plaines Cramoisies",i:"🌸"},{n:"Forêt des Esprits",i:"🌲"},{n:"Sanctuaire des Démons",i:"👹"}],
+armures:[{n:"Armure Magnamalo",t:"Normale",b:"Flammes infernales, Force démoniaque"},{n:"Armure Magnamalo X",t:"Expert",b:"Hellfire maîtrisé, Attaque max"}]},
+
+{id:17,name:"Chameleos",type:"Dragon Ancien",element:"Poison",icon:"👻",tier:"elder",
+desc:"Dragon Ancien aussi fascinant qu'insaisissable. Il peut devenir complètement invisible, se fondre dans son environnement au point de disparaître totalement. Sa longue langue agile lui permet de voler les objets des chasseurs en plein combat, une nuisance unique dans toute la série. Il projette des nuages de vapeur empoisonnée réduisant la visibilité. Il apparaît et disparaît en permanence, rendant la lecture de ses attaques extrêmement difficile.",
+fw:[{e:"Tonnerre",n:3},{e:"Feu",n:2}],
+jeux:["MH Freedom Unite","MH Tri G","MH 4 Ultimate","MH Generations Ultimate","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Forêt Dense",i:"🌲"},{n:"Marécages",i:"🌿"},{n:"Jungle Brumeuse",i:"🌫️"}],
+armures:[{n:"Armure Chameleos",t:"Normale",b:"Poison+, Camouflage partiel"}]},
+
+{id:18,name:"Kushala Daora",type:"Dragon Ancien",element:"Vent",icon:"🌪️",tier:"elder",
+desc:"Dragon Ancien recouvert d'une carapace métallique polie comme un miroir. Une barrière permanente de vents tourbillonnants l'entoure, rendant toute approche frontale difficile. Cette barrière peut être neutralisée par des outils fumigènes. Il projette des tornades persistantes et ses rafales directes ont une portée et puissance considérables. Lorsqu'enragé, sa barrière devient si dense qu'elle est visible à l'oeil nu.",
+fw:[{e:"Tonnerre",n:3},{e:"Dragon",n:2},{e:"Feu",n:1}],
+jeux:["MH Freedom 2","MH Freedom Unite","MH Tri G","MH 4 Ultimate","MH Generations","MH World","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Toundra",i:"❄️"},{n:"Désert",i:"🏜️"},{n:"Sommet des Nuages",i:"☁️"}],
+armures:[{n:"Armure Kushala Daora",t:"Normale",b:"Barrière de vent, Résistance rafales"},{n:"Armure Kushala S",t:"Améliorée",b:"Maître du vent, Esquive tempête"}]},
+
+{id:19,name:"Teostra",type:"Dragon Ancien",element:"Feu/Explosion",icon:"☀️",tier:"elder",
+desc:"Le Roi du Feu, Dragon Ancien d'une magnificence dévastatrice. Il accumule dans ses écailles une poudre inflammable extrêmement volatile qu'il libère progressivement. Quand la concentration atteint un seuil critique, il déclenche une mega-explosion : la Nova Supercritique. Son souffle de feu peut fondre les armures en quelques secondes. Il tend des pièges de poudre puis les fait exploser stratégiquement. En duo avec la Lunastra, ils sont dévastateurs.",
+fw:[{e:"Eau",n:3},{e:"Glace",n:2},{e:"Dragon",n:1}],
+jeux:["MH 2","MH Freedom 2","MH Freedom Unite","MH Tri G","MH 4","MH 4 Ultimate","MH Generations","MH World","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Désert",i:"🏜️"},{n:"Zone Volcanique",i:"🌋"},{n:"Terres Embrasées",i:"🔥"}],
+armures:[{n:"Armure Teostra",t:"Normale",b:"Poudre de feu, Blast critique"},{n:"Armure Teostra β",t:"Améliorée",b:"Roi du feu, Nova maîtrisée"}]},
+
+{id:20,name:"Lunastra",type:"Dragon Ancien",element:"Feu/Explosion",icon:"🌙",tier:"elder",
+desc:"La Reine du Feu, compagne du Teostra dont la dangerosité le dépasse. Son corps irradie une chaleur si intense qu'elle endommage les chasseurs simplement en s'approchant. Elle projette des sphères de feu bleu dense qui persistent dans l'air. Les combats en duo Teostra/Lunastra combinent leurs auras en une symphonie de destruction. La rencontrer est considéré comme un événement exceptionnel et périlleux.",
+fw:[{e:"Eau",n:3},{e:"Dragon",n:2}],
+jeux:["MH 2","MH Freedom 2","MH World","MH World Iceborne"],
+zones:[{n:"Zone Volcanique",i:"🌋"},{n:"Terres Embrasées",i:"🔥"},{n:"Désert Ardent",i:"☀️"}],
+armures:[{n:"Armure Lunastra",t:"Normale",b:"Nova lunaire, Résistance feu max"},{n:"Armure Lunastra β",t:"Améliorée",b:"Reine du feu, Feu bleu divin"}]},
+
+{id:21,name:"Fatalis",type:"Dragon Ancien",element:"Feu",icon:"🐉",tier:"elder",
+desc:"Le Dragon Noir légendaire, la créature la plus redoutée de toute l'histoire de Monster Hunter. Les légendes racontent qu'il a rasé des cités entières et exterminé des guildes complètes. Son souffle de feu est d'une température si absolue qu'il fond instantanément les armures les plus résistantes. La Guilde l'a classifié en mission d'urgence absolue. Le château de Schrade, théâtre de nombreux affrontements, est devenu une ruine hantée par sa présence.",
+fw:[{e:"Eau",n:3},{e:"Dragon",n:2}],
+jeux:["Monster Hunter","MH Freedom","MH Freedom Unite","MH World Iceborne"],
+zones:[{n:"Château de Schrade",i:"🏰"},{n:"Ruines Maudites",i:"💀"},{n:"Zone de Convergence",i:"🔥"}],
+armures:[{n:"Armure Fatalis",t:"Légendaire",b:"Puissance absolue, Feu divin"},{n:"Armure Fatalis α",t:"Légendaire+",b:"Dragon noir ultime, Attaque maximale"}]},
+
+{id:22,name:"Crimson Fatalis",type:"Dragon Ancien",element:"Feu",icon:"🔴",tier:"elder",
+desc:"La variante rouge du Dragon Noir, surpassant en destructivité même l'original. Son feu est si intense qu'il peut faire fondre les armures en Fatalis elles-mêmes. Il attire et absorbe l'énergie volcanique de son environnement. Ses charges sont plus rapides que celles du Fatalis noir. Des chroniques mentionnent des événements climatiques locaux causés par sa simple présence : températures anormales, éruptions locales, pluies de cendres.",
+fw:[{e:"Eau",n:3},{e:"Dragon",n:2}],
+jeux:["Monster Hunter","MH Freedom Unite","MH Tri G"],
+zones:[{n:"Volcan",i:"🌋"},{n:"Château de Schrade",i:"🏰"}],
+armures:[{n:"Armure Crimson Fatalis",t:"Légendaire",b:"Feu écarlate, Fonte des blindages"}]},
+
+{id:23,name:"White Fatalis",type:"Dragon Ancien",element:"Tonnerre",icon:"⚪",tier:"elder",
+desc:"Le Dragon Blanc, la plus ancienne incarnation du Fatalis. Décrit comme l'ancêtre de tous les Dragons Anciens, une créature dont l'âge dépasse la mémoire des plus vieilles civilisations. Il maîtrise la foudre divine avec une puissance sans équivalent. Ses éclairs jaillissent directement de son corps en toutes directions, créant une tempête électrique permanente. Certains textes affirment qu'il est apparu avant même que les humains n'habitent le monde.",
+fw:[{e:"Dragon",n:3},{e:"Eau",n:2}],
+jeux:["Monster Hunter","MH Freedom Unite"],
+zones:[{n:"Château de Schrade",i:"🏰"},{n:"Sommet Céleste",i:"⚡"}],
+armures:[{n:"Armure White Fatalis",t:"Légendaire",b:"Foudre divine, Puissance céleste"}]},
+
+{id:24,name:"Alatreon",type:"Dragon Ancien",element:"Tous",icon:"🌈",tier:"elder",
+desc:"Le Dragon Apocalyptique, maîtrisant simultanément feu, glace, tonnerre et dragon. Son essence élémentaire bascule au cours du combat. Sa mécanique unique : l'Escaton cause des dégâts réductibles uniquement en infligeant suffisamment de dégâts élémentaires dans le bon timing. Décrit dans les mythes comme gardien de l'équilibre élémentaire, entité que les dieux eux-mêmes redoutent. Sa présence est associée à des catastrophes naturelles simultanées.",
+fw:[{e:"Tonnerre",n:3},{e:"Glace",n:2},{e:"Eau",n:2}],
+jeux:["MH Tri","MH Freedom Unite","MH 4 Ultimate","MH Generations Ultimate","MH World Iceborne"],
+zones:[{n:"Île Volcano",i:"🌋"},{n:"Sanctuaire Élémentaire",i:"🌈"}],
+armures:[{n:"Armure Alatreon",t:"Légendaire",b:"Maîtrise élémentaire totale"},{n:"Armure Alatreon β",t:"Légendaire+",b:"Flux élémentaire, Escaton résist."}]},
+
+{id:25,name:"Fatalis",type:"Dragon Ancien",element:"Feu",icon:"🐉",tier:"elder",
+desc:"Le Dragon Noir légendaire, la créature la plus redoutée de toute l'histoire.",
+fw:[{e:"Eau",n:3}],
+jeux:["MH World Iceborne"],
+zones:[{n:"Zone de Convergence",i:"🔥"}],
+armures:[{n:"Armure Fatalis",t:"Légendaire",b:"Puissance absolue"}]},
+
+{id:26,name:"Rajang",type:"Fanged Beast",element:"Tonnerre",icon:"🦍",tier:"large",
+desc:"Primate colossal considéré comme le monstre non-Ancien le plus redoutable. Sa musculature lui permet de soulever des rochers de plusieurs tonnes. Il projette un rayon d'énergie électrique doré dévastateur. En rage, ses membres avant deviennent dorés et ses attaques doublement dévastatrices. Il n'a pratiquement aucun prédateur et attaque même les Dragons Anciens. Le Furious Rajang en rage permanente est l'un des combats les plus difficiles de la série.",
+fw:[{e:"Glace",n:3},{e:"Eau",n:2}],
+jeux:["MH 2","MH Freedom 2","MH Freedom Unite","MH Tri G","MH 4","MH 4 Ultimate","MH Generations","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Jungle",i:"🌴"},{n:"Désert",i:"🏜️"},{n:"Volcan",i:"🌋"}],
+armures:[{n:"Armure Rajang",t:"Normale",b:"Force primale, Tonnerre brut"},{n:"Armure Rajang S",t:"Améliorée",b:"Rage dorée, Attaque max"}]},
+
+{id:27,name:"Deviljho",type:"Wyvern Terrestre",element:"Dragon",icon:"🦎",tier:"large",
+desc:"Le Monstre Insatiable : son métabolisme si rapide le contraint à manger en permanence. Il attaque tout sur son chemin, y compris d'autres grands monstres dont il dévore les carcasses. Il peut happer un chasseur dans sa gueule et le maltraiter. Il expire du Dragon Breath violet quand suffisamment enragé. Il peut attaquer en plein combat avec les chasseurs, transformant toutes les confrontations en chaos total.",
+fw:[{e:"Tonnerre",n:3},{e:"Dragon",n:2}],
+jeux:["MH Tri","MH Tri G","MH 4","MH 4 Ultimate","MH Generations","MH World"],
+zones:[{n:"Partout",i:"⚠️"},{n:"Forêt",i:"🌲"},{n:"Désert",i:"🏜️"},{n:"Volcan",i:"🌋"}],
+armures:[{n:"Armure Deviljho",t:"Normale",b:"Insatiable, Dragon +15"}]},
+
+{id:28,name:"Bazelgeuse",type:"Wyvern Volant",element:"Explosion",icon:"💣",tier:"large",
+desc:"Le bombardier vivant, célèbre pour surgir de nulle part en plein combat. Il largue des écailles explosives depuis les airs, créant un tapis de mines à délai. Il est devenu un mème dans la communauté car il interrompt les combats au moment le plus inopportun. Son arrivée en piqué avec un rugissement tonitruant est reconnaissable entre tous. En combat direct, ses ailes et queue attaquent au corps-à-corps.",
+fw:[{e:"Tonnerre",n:3},{e:"Glace",n:2}],
+jeux:["MH World","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Ancienne Forêt",i:"🌿"},{n:"Terres Corallines",i:"🪸"},{n:"Partout en vol",i:"✈️"}],
+armures:[{n:"Armure Bazelgeuse",t:"Normale",b:"Bombardier, Explosion sur critique"}]},
+
+{id:29,name:"Lagiacrus",type:"Leviathan",element:"Tonnerre",icon:"🐊",tier:"flagship",
+desc:"Le Seigneur des Mers Électrique, l'un des monstres les plus populaires. Ce léviathan règne en maître absolu sur les zones maritimes. Sous l'eau, ses déplacements sont extrêmement rapides et imprévisibles. Il transforme les zones aquatiques en pièges mortels en les chargeant d'électricité. Sa crinière électrique peut s'étendre pour créer des barrières de foudre. Les pêcheurs redoutent sa présence car il peut électrocuter des bateaux entiers.",
+fw:[{e:"Feu",n:3},{e:"Glace",n:2}],
+jeux:["MH Tri","MH Tri G","MH 4 Ultimate","MH Generations Ultimate","MH Rise Sunbreak"],
+zones:[{n:"Littoral",i:"🌊"},{n:"Zones Aquatiques",i:"💧"},{n:"Baie Orageuse",i:"⛈️"}],
+armures:[{n:"Armure Lagiacrus",t:"Normale",b:"Seigneur des mers, Tonnerre +20"}]},
+
+{id:30,name:"Zinogre Stygian",type:"Wyvern Fanged",element:"Dragon",icon:"🌑",tier:"large",
+desc:"La variante sombre du Zinogre électrique. Au lieu d'attirer des Fulgurbug électriques, il attire des insectes porteurs d'énergie draconique rouge foncé. Ses mouvements sont identiques au Zinogre classique mais ses explosions draconiques changent radicalement les résistances nécessaires. Son apparence prend des teintes pourpres et noires. Considéré comme encore plus dangereux que l'original car l'élément dragon est très difficile à résister.",
+fw:[{e:"Dragon",n:3},{e:"Glace",n:2}],
+jeux:["MH Tri G","MH Generations Ultimate","MH World Iceborne"],
+zones:[{n:"Cavernes Obscures",i:"🌑"},{n:"Toundra",i:"❄️"}],
+armures:[{n:"Armure Zinogre Stygian",t:"Normale",b:"Dragon +20, Ombre foudroyante"}]},
+
+{id:31,name:"Barioth",type:"Wyvern Volant",element:"Glace",icon:"🌨️",tier:"large",
+desc:"Wyvern volant adapté aux environnements glacés qui se déplace avec une agilité stupéfiante. Ses griffes spéciales lui permettent de s'accrocher aux parois de glace et de glisser à des vitesses folles. Il crée des tornades de neige réduisant la visibilité. Ses coups de queue projettent les chasseurs sur des distances impressionnantes. Il attaque depuis des angles inhabituels en s'élançant depuis les parois.",
+fw:[{e:"Tonnerre",n:3},{e:"Feu",n:2}],
+jeux:["MH Tri","MH Tri G","MH Generations Ultimate","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Toundra",i:"❄️"},{n:"Sanctuaire de Givre",i:"🏔️"},{n:"Glacier",i:"🧊"}],
+armures:[{n:"Armure Barioth",t:"Normale",b:"Griffe de glace, Vitesse+"}]},
+
+{id:32,name:"Yian Garuga",type:"Wyvern Volant",element:"Poison",icon:"🦅",tier:"large",
+desc:"Wyvern noir au tempérament particulièrement agressif et imprévisible, l'un des plus frustrants pour les chasseurs intermédiaires. Il combine la vivacité d'un raptor avec la puissance d'un wyvern adulte. Son bec dentelé perce les armures légères et sa queue empoisonnée inflige un venin rapide. Il enchaîne charges, plongeons et attaques de feu en combinaisons imprévisibles. Ses oreilles démesurées détectent les mouvements hors de sa vue.",
+fw:[{e:"Tonnerre",n:3},{e:"Glace",n:2}],
+jeux:["Monster Hunter","MH Freedom","MH Freedom 2","MH Freedom Unite","MH Generations","MH World Iceborne","MH Rise Sunbreak"],
+zones:[{n:"Forêt et Collines",i:"🌲"},{n:"Désert",i:"🏜️"}],
+armures:[{n:"Armure Yian Garuga",t:"Normale",b:"Poison critique, Témérité"}]},
+
+{id:33,name:"Anjanath",type:"Wyvern Fanged",element:"Feu",icon:"🦖",tier:"large",
+desc:"Prédateur bipède ressemblant à un tyrannosaure rex avec des ailes membraneuses. Il domine les forêts en chassant tout ce qui est plus petit. Ses membranes nasales se déploient quand enragé, amplifiant ses cris pour paralyser les chasseurs. Il crache du feu et charge à une vitesse trompeuse pour sa taille. Ses coups de queue peuvent envoyer un chasseur traverser tout le terrain. Sa fourrure rose le rend reconnaissable de loin.",
+fw:[{e:"Eau",n:3},{e:"Tonnerre",n:2},{e:"Glace",n:1}],
+jeux:["MH World","MH World Iceborne"],
+zones:[{n:"Ancienne Forêt",i:"🌿"},{n:"Zone Boisée",i:"🌲"}],
+armures:[{n:"Armure Anjanath",t:"Normale",b:"Feu brut, Témérité combat"}]},
+
+{id:34,name:"Odogaron",type:"Wyvern Fanged",element:"Néant",icon:"🩸",tier:"large",
+desc:"Prédateur rapide et furieux des Terres Putréfiées aux griffes d'une acuité exceptionnelle. Il inflige le statut Saignement : chaque mouvement du chasseur affecté lui coûte de la vie. Sa vitesse est l'une des plus élevées du bestiaire, enchaînant plusieurs attaques avant que le chasseur réagisse. On le retrouve souvent à ronger des ossements pour maintenir ses dents en état. En rage, ses griffes s'illuminent d'une énergie rouge sang.",
+fw:[{e:"Glace",n:3},{e:"Tonnerre",n:2}],
+jeux:["MH World","MH World Iceborne"],
+zones:[{n:"Terres Putréfiées",i:"☠️"},{n:"Cavernes Sombres",i:"🕳️"}],
+armures:[{n:"Armure Odogaron",t:"Normale",b:"Tranchant+, Affûtage rapide"},{n:"Armure Odogaron β",t:"Améliorée",b:"Lame sanguinaire, Critique+"}]},
+
+{id:35,name:"Vaal Hazak",type:"Dragon Ancien",element:"Dragon/Miasme",icon:"☠️",tier:"elder",
+desc:"Le Dragon Ancien des morts vivant au coeur des Terres Putréfiées. Entouré d'un miasme toxique dense qu'il inhale et exhale en boucle, celui-ci réduit de moitié la barre de vie maximale des chasseurs exposés. Il projette ce miasme en colonnes ou ondes, et peut tout relâcher en une explosion de corruption massive. Sa peau transparente laisse voir ses organes comme des lanternes. Joue un rôle écologique crucial en recyclant les organismes morts.",
+fw:[{e:"Dragon",n:3},{e:"Feu",n:2}],
+jeux:["MH World","MH World Iceborne"],
+zones:[{n:"Terres Putréfiées",i:"☠️"},{n:"Vallée des Morts",i:"🌑"}],
+armures:[{n:"Armure Vaal Hazak",t:"Normale",b:"Miasme maîtrisé, Vitalité régénérée"},{n:"Armure Vaal Hazak β",t:"Améliorée",b:"Nécromancien, HP max+"}]},
+
+{id:36,name:"Kirin",type:"Dragon Ancien",element:"Tonnerre",icon:"🦄",tier:"elder",
+desc:"Dragon Ancien le plus mystérieux, apparaissant comme une licorne majestueuse. Sa corne unique émet une lumière pure mais cache l'un des prédateurs les plus dangereux. Il contrôle la foudre céleste et se déplace si vite qu'il semble se téléporter. Ses éclairs au sol créent des zones électrifiées persistantes transformant l'arène en labyrinthe de danger. Sa fourrure blanche est composée de filaments conducteurs qui amplifient l'électricité atmosphérique.",
+fw:[{e:"Feu",n:3},{e:"Eau",n:2}],
+jeux:["Monster Hunter","MH Freedom 2","MH Freedom Unite","MH Generations","MH World","MH Rise"],
+zones:[{n:"Toundra",i:"❄️"},{n:"Prairies Mystiques",i:"🌸"},{n:"Plateau Céleste",i:"☁️"}],
+armures:[{n:"Armure Kirin",t:"Normale",b:"Grâce mystique, Tonnerre +20"}]},
+
+{id:37,name:"Akantor",type:"Wyvern Terrestre",element:"Néant",icon:"⬛",tier:"elder",
+desc:"Le Dieu Noir, l'un des prédateurs les plus puissants jamais répertoriés. Sans ailes, toute sa puissance est dans ses membres et son système sonique. Son rugissement génère un vortex d'air qui aspire tout avant de projeter avec une force dévastatrice. Sa peau est pratiquement impénétrable aux attaques frontales. Il n'a aucun prédateur naturel et même les Dragons Anciens l'évitent. Sa présence signifie l'extinction progressive de toute autre vie dans la région.",
+fw:[{e:"Glace",n:3}],
+jeux:["MH Freedom 2","MH Freedom Unite","MH Tri G","MH Generations","MH Rise Sunbreak"],
+zones:[{n:"Terre des Dieux",i:"⬛"},{n:"Sanctuaire Obscur",i:"🕳️"}],
+armures:[{n:"Armure Akantor",t:"Légendaire",b:"Dieu noir, Force brute absolue"}]},
+
+{id:38,name:"Ukanlos",type:"Wyvern Terrestre",element:"Glace",icon:"🏔️",tier:"elder",
+desc:"Le Dieu Blanc des Neiges, pendant arctique de l'Akantor. Il utilise sa mâchoire inférieure proéminente comme un soc de charrue pour briser la glace et projeter des blocs massifs. Il peut plonger sous la surface glacée et ressurgir pour attaquer par surprise. Son souffle glacial peut instantanément congeler un chasseur. Il transforme progressivement le terrain en labyrinthe de stalactites et congères. Vénéré comme la divinité de l'hiver éternel dans le folklore arctique.",
+fw:[{e:"Feu",n:3}],
+jeux:["MH Freedom Unite","MH Tri G","MH Generations Ultimate"],
+zones:[{n:"Toundra Arctique",i:"❄️"},{n:"Glacier Éternel",i:"🧊"}],
+armures:[{n:"Armure Ukanlos",t:"Légendaire",b:"Dieu blanc, Glace divine"}]},
+
+{id:39,name:"Narwa",type:"Dragon Ancien",element:"Tonnerre",icon:"⛈️",tier:"elder",
+desc:"La Reine du Tonnerre, Dragon Ancien femelle et boss final de Monster Hunter Rise. Elle flotte dans les airs et libère des tempêtes de foudre d'une intensité inégalée. Son abdomen transparent laisse voir l'énergie électrique qu'elle accumule. Elle appelle la foudre du ciel, projette des sphères d'éclairs et peut déclencher une tempête couvrant toute l'arène. Sa forme Allmother, après avoir absorbé l'essence d'Ibushi, atteint un niveau cataclysmique qui menace l'existence de Kamura.",
+fw:[{e:"Eau",n:3},{e:"Dragon",n:2}],
+jeux:["MH Rise","MH Rise Sunbreak"],
+zones:[{n:"Sanctuaire du Tonnerre",i:"⚡"},{n:"Cimes Orageuses",i:"⛈️"}],
+armures:[{n:"Armure Narwa",t:"Normale",b:"Tempête divine, Tonnerre max"},{n:"Armure Narwa Allmother",t:"Spéciale",b:"Reine absolue, Foudre sacrée"}]},
+
+{id:40,name:"Ibushi",type:"Dragon Ancien",element:"Vent",icon:"🌬️",tier:"elder",
+desc:"Le Dragon Céleste mâle, créature divine associée aux légendes de Kamura. Il contrôle les courants d'air avec une précision et puissance absolues, se déplaçant comme s'il était lui-même composé de vent. Son corps translucide aux reflets bleutés semble presque irréel. Ses attaques créent des tornades persistantes qui dévient les projectiles. Sa connexion spirituelle avec Narwa est au coeur de la mythologie de Kamura : leur union déclenche un Rampage cataclysmique.",
+fw:[{e:"Tonnerre",n:3},{e:"Dragon",n:2}],
+jeux:["MH Rise"],
+zones:[{n:"Cimes de Kamura",i:"⛰️"},{n:"Sanctuaire Céleste",i:"☁️"}],
+armures:[{n:"Armure Ibushi",t:"Normale",b:"Grâce du vent, Attaque aérienne"}]},
+
+{id:41,name:"Malzeno",type:"Dragon Ancien",element:"Virus Qurio",icon:"🧛",tier:"elder",
+desc:"Le Dragon Vampire de Sunbreak. Il utilise des parasites Qurio pour drainer la force vitale de ses proies. Sa version Bloodblight est particulièrement redoutée. Représente une menace d'extinction pour tout l'écosystème.",
+fw:[{e:"Tonnerre",n:3},{e:"Dragon",n:2}],
+jeux:["MH Rise Sunbreak"],
+zones:[{n:"Ruines d'Elgado",i:"🏰"},{n:"Terres Écarlates",i:"🔴"}],
+armures:[{n:"Armure Malzeno",t:"Normale",b:"Drain vital, Attaque dragon"}]},
+
+{id:42,name:"Gaismagorm",type:"Dragon Ancien",element:"Dragon",icon:"🕳️",tier:"elder",
+desc:"Le boss final de Monster Hunter Rise Sunbreak, Dragon Ancien colossal vivant dans les profondeurs souterraines d'Elgado. Il se nourrit des parasites Qurio pour amplifier sa puissance draconique. Ses membres antérieurs griffus déchirent la roche comme du papier. Il libère des colonnes d'énergie draconique depuis le sol. Sa phase finale déclenche une explosion draconique capable d'effacer des groupes entiers de chasseurs. Sa conquête est la mission finale de Sunbreak.",
+fw:[{e:"Dragon",n:3},{e:"Tonnerre",n:2}],
+jeux:["MH Rise Sunbreak"],
+zones:[{n:"Profondeurs d'Elgado",i:"🕳️"},{n:"Abysses Souterrains",i:"🌑"},{n:"Cavernes Draconiques",i:"🐉"}],
+armures:[{n:"Armure Gaismagorm",t:"Légendaire",b:"Dévoreur Qurio, Dragon absolu, Puissance abyssale"}]},
+
+{id:43,name:"Gogmazios",type:"Dragon Ancien",element:"Goudron/Dragon",icon:"🛢️",tier:"elder",
+desc:"Le Dragon du Goudron, exclusif de Monster Hunter 4 Ultimate et de MH Wilds. Recouvert d'une substance noire visqueuse semblable à du pétrole qui suinte en permanence de son corps, hautement inflammable. Il recouvre progressivement l'arène de ce goudron noir puis déclenche des explosions massives en y mettant le feu. Sa capacité la plus terrifiante : il peut désactiver les Ballistes et canons des Forteresses de Chasse, rendant inutilisables les renforts habituels. Sa queue peut se transformer en arme perçante gigantesque. Son retour dans MH Wilds a été accueilli avec enthousiasme par les fans de longue date.",
+fw:[{e:"Feu",n:3},{e:"Eau",n:2},{e:"Dragon",n:1}],
+jeux:["MH 4 Ultimate","MH Wilds"],
+zones:[{n:"Forteresse de Chasse",i:"🏰"},{n:"Terres Pétrolifères",i:"🛢️"},{n:"Badlands",i:"🌑"},{n:"Zones Industrielles",i:"⚙️"}],
+armures:[{n:"Armure Gogmazios",t:"Légendaire",b:"Goudron offensif, Dragon +25, Désactivation canon"},{n:"Armure Gogmazios α",t:"Légendaire+",b:"Dragon du pétrole, Explosion de goudron, Puissance divine"}]},
+
+{id:44,name:"Espinas",type:"Wyvern Volant",element:"Feu/Poison",icon:"🌵",tier:"large",
+desc:"Wyvern recouvert d'épines venimeuses qui préfère rester immobile, feigning le sommeil pour piéger les chasseurs imprudents. Cette feinte trompe souvent ceux qui le croient inoffensif. Ses épines sont projetées comme des fléchettes empoisonnées et sa queue est redoutable. Quand vraiment en colère, il devient l'un des monstres les plus dévastateurs de Sunbreak. Ses variantes incluent des versions tonnerre et glace.",
+fw:[{e:"Glace",n:3},{e:"Eau",n:2}],
+jeux:["MH Rise Sunbreak"],
+zones:[{n:"Forêt Épineuse",i:"🌵"},{n:"Jungle Dense",i:"🌴"}],
+armures:[{n:"Armure Espinas",t:"Normale",b:"Épines venimeuses, Contre-attaque passive"}]},
+
+{id:45,name:"Garangolm",type:"Fanged Beast",element:"Feu/Eau",icon:"🦴",tier:"large",
+desc:"Gorille colossal dont les bras massifs sont recouverts de mousses bioluminescentes aux propriétés élémentaires. La mousse rouge confère des propriétés de feu, la mousse bleue des propriétés d'eau. Il alterne entre ses deux éléments selon sa stratégie. Ses poings ont la taille d'un chasseur complet et ses coups créent des cratères. Malgré son apparence primitive, il cible stratégiquement les chasseurs les plus isolés.",
+fw:[{e:"Tonnerre",n:3},{e:"Glace",n:2}],
+jeux:["MH Tri G","MH Generations Ultimate","MH Rise Sunbreak"],
+zones:[{n:"Zones Humides",i:"💧"},{n:"Forêt Primaire",i:"🌲"}],
+armures:[{n:"Armure Garangolm",t:"Normale",b:"Double élément maîtrisé, Force brute"}]},
+
+{id:46,name:"Seregios",type:"Wyvern Volant",element:"Néant",icon:"🗡️",tier:"large",
+desc:"Wyvern solitaire et territorial aux écailles tranchantes comme des rasoirs. Ces écailles projetées infligent le statut Saignement. Il est particulièrement agressif envers ses congénères et combat d'autres Seregios pour sa domination territoriale. Sa biologie lui permet de régénérer continuellement ses écailles. Dans la hiérarchie des wyverns, il est un concurrent direct du Rathalos pour la domination aérienne.",
+fw:[{e:"Tonnerre",n:3},{e:"Glace",n:2}],
+jeux:["MH 4 Ultimate","MH Generations Ultimate"],
+zones:[{n:"Forêt Dense",i:"🌲"},{n:"Montagne Rocheuse",i:"⛰️"}],
+armures:[{n:"Armure Seregios",t:"Normale",b:"Écailles lames, Saignement+"}]},
+
+{id:47,name:"Brachydios Enragé",type:"Wyvern Fanged",element:"Explosion",icon:"🟢",tier:"large",
+desc:"La forme de rage absolue du Brachydios, l'un des combats les plus éprouvants d'Iceborne. Son mucus devient d'un vert lumineux presque blanc et ses explosions sont quasi instantanées. L'arène se recouvre rapidement de slime créant des réactions en chaîne dévastatrices. Chaque coup inflige des dégâts d'explosion immédiats. Un rite de passage pour tout chasseur de haut rang.",
+fw:[{e:"Glace",n:3},{e:"Eau",n:2}],
+jeux:["MH World Iceborne"],
+zones:[{n:"Toundra",i:"❄️"}],
+armures:[{n:"Armure Brachydios Enragé",t:"Spéciale",b:"Explosion maximale instantanée, Chaîne explosive"}]},
+
+{id:48,name:"Savage Deviljho",type:"Wyvern Terrestre",element:"Dragon",icon:"🔥",tier:"large",
+desc:"Le Deviljho en état de rage perpétuelle : ses besoins métaboliques ont atteint un stade critique l'obligeant à attaquer tout ce qu'il voit sans relâche. Sa peau prend des teintes encore plus sombres et ses veines de Dragon Breath apparaissent en surface en permanence. Il attaque immédiatement et persistera jusqu'à élimination totale. L'une des créatures les plus universellement craintes de la série.",
+fw:[{e:"Dragon",n:3},{e:"Tonnerre",n:2}],
+jeux:["MH Tri","MH Tri G","MH 4 Ultimate","MH Generations Ultimate"],
+zones:[{n:"Partout",i:"⚠️"}],
+armures:[{n:"Armure Deviljho Savage",t:"Spéciale",b:"Rage permanente, Dragon brut maximal"}]}
+];
+
+// Remove duplicate id:25 (wrong)
+var seen={};
+M=M.filter(function(m){if(seen[m.id])return false;seen[m.id]=true;return true;});
+
+var allG=[...new Set(M.flatMap(function(m){return m.jeux;}))].sort();
+var allTy=[...new Set(M.map(function(m){return m.type;}))].sort();
+var gs=document.getElementById("fG");var ts=document.getElementById("fTy");
+var og=document.createElement("option");og.value="all";og.textContent="Tous les jeux";gs.appendChild(og);
+allG.forEach(function(g){var o=document.createElement("option");o.value=g;o.textContent=g;gs.appendChild(o);});
+var ot=document.createElement("option");ot.value="all";ot.textContent="Tous les types";ts.appendChild(ot);
+allTy.forEach(function(t){var o=document.createElement("option");o.value=t;o.textContent=t;ts.appendChild(o);});
+
+var cur=M.slice();
+function af(){
+  var s=document.getElementById("sI").value.toLowerCase();
+  var ti=document.getElementById("fT").value;
+  var ga=document.getElementById("fG").value;
+  var ty=document.getElementById("fTy").value;
+  cur=M.filter(function(m){
+    var ok=m.name.toLowerCase().indexOf(s)>=0||m.type.toLowerCase().indexOf(s)>=0||m.element.toLowerCase().indexOf(s)>=0;
+    return ok&&(ti==="all"||m.tier===ti)&&(ga==="all"||m.jeux.indexOf(ga)>=0)&&(ty==="all"||m.type===ty);
+  });
+  rg();
+}
+function rg(){
+  var g=document.getElementById("mg");var e=document.getElementById("es");
+  document.getElementById("rc").textContent=cur.length+" monstre"+(cur.length>1?"s":"");
+  if(!cur.length){g.innerHTML="";e.style.display="block";return;}
+  e.style.display="none";
+  g.innerHTML=cur.map(function(m,i){
+    var t=T[m.tier];var k=kills[m.id]||0;
+    return '<div class="mc" onclick="om('+m.id+')" style="border:1px solid '+t.c+'30;animation-delay:'+(i*0.02)+'s">'
+      +'<div class="cs" style="background:linear-gradient(90deg,transparent,'+t.c+',transparent)"></div>'
+      +(k>0?'<div class="kb">💀 '+k+'</div>':'')
+      +'<span class="ci">'+m.icon+'</span>'
+      +'<div class="cn">'+m.name+'</div>'
+      +'<div class="ct">'+m.type+'</div>'
+      +'<div class="cb">'
+      +'<span class="badge" style="background:'+t.b+';color:'+t.c+';border:1px solid '+t.c+'44">'+t.l+'</span>'
+      +'<span class="badge" style="background:rgba(255,100,30,0.1);color:#ff8844;border:1px solid rgba(255,100,30,0.3)">⚡ '+m.element+'</span>'
+      +'</div></div>';
+  }).join("");
+}
+function om(id){
+  var m=null;for(var i=0;i<M.length;i++)if(M[i].id===id){m=M[i];break;}
+  if(!m)return;
+  var t=T[m.tier];var k=kills[m.id]||0;
+  document.getElementById("mst2").style.background="linear-gradient(90deg,transparent,"+t.c+",transparent)";
+  document.getElementById("mbox").style.boxShadow="0 0 60px "+t.c+"22";
+  document.getElementById("mico").textContent=m.icon;
+  document.getElementById("mname").textContent=m.name;
+  document.getElementById("mmeta").textContent=m.type+" — "+t.l;
+  document.getElementById("mdesc").textContent=m.desc;
+  var fw=m.fw.map(function(f){return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="font-size:13px;color:'+ec(f.e)+';font-family:Cinzel,serif">'+f.e+'</span><span style="color:#ffaa44;font-size:12px">'+st(f.n)+'</span></div>';}).join("");
+  var zo=m.zones.map(function(z){return '<span class="zp">'+z.i+' '+z.n+'</span>';}).join("");
+  var je=m.jeux.map(function(j){return '<span class="gp">'+j+'</span>';}).join("");
+  var ar=m.armures.map(function(a){return '<div class="ai">'+a.n+' <em style="color:#ffaa44;font-size:11px">['+a.t+']</em><span>'+a.b+'</span></div>';}).join("");
+  document.getElementById("mcont").innerHTML=
+    '<div class="st">💀 Monstres tués</div>'
+    +'<div class="kc"><div><div class="kd" id="kd'+m.id+'">'+k+'</div><div class="kl">TUÉS</div></div>'
+    +'<div class="kbs"><button class="kb2 km" onclick="uk('+m.id+',-1,event)">−</button>'
+    +'<button class="kb2 kp" onclick="uk('+m.id+',1,event)">+</button>'
+    +'<button class="kr" onclick="uk('+m.id+',0,event)">RAZ</button></div></div>'
+    +'<div class="st">⚡ Faiblesses élémentaires</div>'
+    +'<div class="mst"><div class="sb"><div class="sl">Élément</div><div class="sv" style="color:'+ec(m.element)+'">'+m.element+'</div></div>'
+    +'<div class="sb"><div class="sl">Faiblesses</div><div style="margin-top:4px">'+fw+'</div></div></div>'
+    +'<div class="st">🗺️ Zones de chasse</div><div class="zl">'+zo+'</div>'
+    +'<div class="st">🎮 Apparitions dans la série</div><div class="gl">'+je+'</div>'
+    +'<div class="st">🛡️ Armures craftables</div><div class="al">'+ar+'</div>';
+  document.getElementById("mo").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function uk(id,val,event){
+  event.stopPropagation();
+  kills[id]=val===0?0:Math.max(0,(kills[id]||0)+val);
+  sk();
+  var d=document.getElementById("kd"+id);
+  if(d){d.textContent=kills[id];d.style.transform="scale(1.3)";setTimeout(function(){d.style.transform="scale(1)";},150);}
+  rg();
+}
+function cm(e){if(e.target===document.getElementById("mo"))cmd();}
+function cmd(){document.getElementById("mo").classList.remove("open");document.body.style.overflow="";}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")cmd();});
+rg();
+</script>
+</body>
+</html>
